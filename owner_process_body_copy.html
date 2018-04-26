@@ -3,10 +3,11 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"
+    />
     <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
 
-    <link rel="stylesheet" type="text/css" href="http://aui-cdn.atlassian.com/aui-adg/6.0.9/css/aui.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/aui.2.0.css" />
     <link rel="stylesheet" type="text/css" href="css/iconfont.css" />
     <style>
         .border-box {
@@ -234,21 +235,21 @@
         <div class="wrap-process bor-r8 flex flex-justify-center flex-align-center">
             <div class="process-container flex-v ">
                 <div class="con-item" v-for="(item,index) in procer">
-                    <div class="item-middle active">
+                    <div class="item-middle " :class="item.active">
                         <div class="middle-icon">
                             <i class="iconfont  i-center" :class="item.iconX"></i>
                         </div>
                         <div class="middle-describe">
                             {{item.font}}
                             <!-- <i class="iconfont" :class="[item.isIcon ===1 ?'icon-wuuiconxuan':'icon-cuowu']"></i> -->
-                            <i class="iconfont icon-cuowu" v-if="item.isIcon===0" ></i>
-                            <i class="iconfont icon-wuuiconxuan" v-if="item.isIcon===1" ></i>
-                            <i class="iconfont icon-jinhangzhong" v-if="item.isIcon===2" ></i>
+                            <i class="iconfont icon-cuowu" v-if="item.isIcon===0"></i>
+                            <i class="iconfont icon-wuuiconxuan" v-if="item.isIcon===1"></i>
+                            <i class="iconfont icon-jinhangzhong" v-if="item.isIcon===2"></i>
                         </div>
                     </div>
                     <div class="serial">
-                        <div class="serial-line active-bg" v-if="item.isLine"></div>
-                        <i class="iconfont serial-i active" :class="item.iconNum"></i>
+                        <div class="serial-line" v-if="item.isLine" :class="item.activeBg"></div>
+                        <i class="iconfont serial-i " :class="[item.iconNum,item.active]"></i>
                     </div>
                 </div>
 
@@ -261,38 +262,91 @@
     var app = new Vue({
         el: "#wrap",
         data: {
-            
-            procer: [
-              {
-                font:"填写信息提交初审",
-                iconX:'icon-tianxie',
-                iconNum:'icon-1',
-                isLine:true,
-                isIcon:1,
-              },
-              {font:"物业管理部审核中",iconX:'icon-shenhe1',iconNum:'icon-2',isLine:true,isIcon:1,},
-              {font:"维修师傅接单中",iconX:'icon-1shangmen',iconNum:'icon-3',isLine:true,isIcon:2,},
-              {font:"正在维修中",iconX:'icon-weixiu',iconNum:'icon-4',isLine:true,isIcon:0,},
-              {font:"维修已完成",iconX:'icon-fabu',iconNum:'icon-5',isLine:false,isIcon:0,}
+            state: 5,
+            procer: [{
+                    font: "填写信息提交初审",
+                    iconX: 'icon-tianxie',
+                    iconNum: 'icon-1',
+                    isLine: true,
+                    isIcon: 1,
+                    activeBg: "active-bg",
+                    active: "active"
+                },
+                {
+                    font: "物业管理部审核中",
+                    iconX: 'icon-shenhe1',
+                    iconNum: 'icon-2',
+                    isLine: true,
+                    isIcon: 1,
+                    activeBg: "active-bg",
+                    active: "active"
+                },
+                {
+                    font: "维修师傅接单中",
+                    iconX: 'icon-1shangmen',
+                    iconNum: 'icon-3',
+                    isLine: true,
+                    isIcon: 2,
+                    activeBg: "",
+                    active: "active"
+                },
+                {
+                    font: "正在维修中",
+                    iconX: 'icon-weixiu',
+                    iconNum: 'icon-4',
+                    isLine: true,
+                    isIcon: 0,
+                    activeBg: "",
+                    active: ""
+                },
+                {
+                    font: "维修已完成",
+                    iconX: 'icon-fabu',
+                    iconNum: 'icon-5',
+                    isLine: false,
+                    isIcon: 0,
+                    active: ""
+                }
             ],
         },
         methods: {
-            init: function() {
-               
-
+            init: function () {
+                console.log(this.setState)
             },
-            showDefault: function() {
-                
-
-            }
         },
         computed: {
-           
+            //计算报修进度
+            setState: function () {
+                var array = this.procer;
+                var state = this.state - 1;
+                for (var i = 0; i < 5; i++) {
+                    if (i < state) {
+                        array[i].activeBg = "active-bg";
+                        array[i].isIcon = 1;
+                        array[i].active = "active";
+                    } else if (i === 4 && i === state) {
+                        array[i].activeBg = "";
+                        array[i].isIcon = 1;
+                        array[i].active = "active";
+                    } else if (i === state) {
+
+                        array[i].activeBg = "";
+                        array[i].isIcon = 2;
+                        array[i].active = "active";
+
+                    } else {
+                        array[i].activeBg = "";
+                        array[i].isIcon = 0;
+                        array[i].active = "";
+                    }
+                }
+                this.setState = array
+                return array;
+            },
         }
 
     })
-
-   
+    app.init();
 </script>
 
 </html>
